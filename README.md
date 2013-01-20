@@ -71,7 +71,7 @@ See [AUTHORS.txt](https://raw.github.com/thoughtpolice/heroku-ping/master/AUTHOR
 
 # License
 
-BSD3. See
+MIT. See
 [LICENSE.txt](https://raw.github.com/thoughtpolice/heroku-ping/master/LICENSE.txt)
 for terms of copyright and redistribution.
 
