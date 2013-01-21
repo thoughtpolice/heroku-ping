@@ -21,7 +21,7 @@ def ping
   LOG.info "Pinging #{ENV['PING_URL']}..."
   resp = RestClient.get ENV['PING_URL']
   if resp.code == 200
-    LOG.info "OK return code"
+    LOG.info "OK return code (200)"
   else
     LOG.error "INVALID return code (#{resp.code}) - headers: #{resp.headers}"
     LOG.error "Response given from server:\n#{resp}"
