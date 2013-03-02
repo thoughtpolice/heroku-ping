@@ -31,7 +31,7 @@ def ping
   LOG.info "HTTP method: #{ENV['PING_METHOD'].to_s.upcase}"
 
   resp = request(ENV['PING_URL'], ENV['PING_METHOD'].downcase.to_sym)
-  if resp.code =~ /^[1-3]..$/ # Valid codes [100-399]
+  if resp.code =~ /^[1-3][0-9]{2}$/ # Valid codes [100-399]
     LOG.info "Status code: (#{resp.code})"
   else
     headers = ''
