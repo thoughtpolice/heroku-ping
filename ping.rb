@@ -38,7 +38,7 @@ def ping
     resp.each_header { | k, v | headers << "\n#{k} = #{v}" }
 
     LOG.error "Status code: (#{resp.code})"
-    LOG.error "Response headers:#{headers}"
+    LOG.error "Response headers: #{headers}"
     LOG.error "Response body:\n#{resp.body}" unless resp.body.nil?
   end
 end
