@@ -1,7 +1,8 @@
 # heroku-ping: utility to keep heroku web applications active
 # Copyright (c) 2013 Austin Seipp. See license notice in LICENSE.txt.
+require 'net/http'
+
 require 'clockwork'
-require 'rest_client'
 require 'logger'
 
 ## -----------------------------------------------------------------------------
@@ -14,18 +15,46 @@ if ENV['PING_URL'] == nil
   Kernel.exit -1
 end
 
+if ENV['PING_METHOD'] == nil
+  ENV['PING_METHOD'] = 'HEAD'
+end
+
+if ENV['PING_INTERVAL'] == nil
+  ENV['PING_INTERVAL'] = '1200'
+end
+
 ## -----------------------------------------------------------------------------
 ## -- Handlers -----------------------------------------------------------------
 
 def ping
   LOG.info "Pinging #{ENV['PING_URL']}..."
-  resp = RestClient.get ENV['PING_URL']
-  if resp.code == 200
-    LOG.info "OK return code (200)"
+  LOG.info "HTTP method: #{ENV['PING_METHOD'].to_s.upcase}"
+
+  resp = request(ENV['PING_URL'], ENV['PING_METHOD'].downcase.to_sym)
+  if resp.code =~ /^[1-3]..$/ # Valid codes [100-399]
+    LOG.info "Status code: (#{resp.code})"
   else
-    LOG.error "INVALID return code (#{resp.code}) - headers: #{resp.headers}"
-    LOG.error "Response given from server:\n#{resp}"
+    headers = ''
+    resp.each_header { | k, v | headers << "\n#{k} = #{v}" }
+
+    LOG.error "Status code: (#{resp.code})"
+    LOG.error "Response headers:#{headers}"
+    LOG.error "Response body:\n#{resp.body}" unless resp.body.nil?
   end
+end
+
+def request(uri, type=:head)
+ url = URI.parse(uri)
+ Net::HTTP.start(url.host, url.port) do | http |
+   case type
+   when :head
+     http.head(url.path)
+   when :get
+     http.get(url.path)
+   else
+     raise ArgumentError, 'Unsupported HTTP method'
+   end
+ end
 end
 
 ## -----------------------------------------------------------------------------
@@ -34,10 +63,11 @@ end
 module Clockwork
   handler do |j|
     case j
-      when 'ping.homepage' then ping
+      when 'ping.act' then ping
       else raise ArgumentError, 'Invalid argument!'
     end
   end
-  every 20.minutes, 'ping.homepage'
-  LOG.info "Now pinging #{ENV['PING_URL']} every 20m..."
+  every ENV['PING_INTERVAL'].to_i.seconds, 'ping.act'
+  LOG.info \
+    "Now pinging #{ENV['PING_URL']} every #{ENV['PING_INTERVAL']} seconds..."
 end
