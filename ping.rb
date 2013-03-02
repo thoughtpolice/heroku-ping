@@ -45,12 +45,14 @@ end
 
 def request(uri, type=:head)
  url = URI.parse(uri)
+ url_path = url.path == '' ? '/' : url.path
+
  Net::HTTP.start(url.host, url.port) do | http |
    case type
    when :head
-     http.head(url.path)
+     http.head(url_path)
    when :get
-     http.get(url.path)
+     http.get(url_path)
    else
      raise ArgumentError, 'Unsupported HTTP method'
    end
