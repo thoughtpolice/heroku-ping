@@ -1,3 +1,7 @@
 Author, target of blame:
 
-  Austin Seipp <mad [dot] one [@at] gmail [dot] com>
+  Austin Seipp <aseipp [@at] pobox [dot] com>
+
+People who contributed code, patches or lively discussion include:
+
+  Aleksandrs Ļedovskis <aleksandrs [@at] ledovskis [dot] lv>
