@@ -3,9 +3,6 @@ GEM
   specs:
     clockwork (0.4.1)
       tzinfo
-    mime-types (1.19)
-    rest-client (1.6.7)
-      mime-types (>= 1.16)
     tzinfo (0.3.35)
 
 PLATFORMS
@@ -13,4 +10,3 @@ PLATFORMS
 
 DEPENDENCIES
   clockwork
-  rest-client
