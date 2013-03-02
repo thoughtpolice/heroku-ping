@@ -24,6 +24,13 @@ Git remote heroku added
 Now add the URL of the heroku application you want to ping using the
 `PING_URL` environment variable.
 
+You can also choose HTTP request method and pinging interval via
+`PING_METHOD` and `PING_INTERVAL` variables
+
+`PING_METHOD` accepts `HEAD` (default) or `GET` values
+
+`PING_INTERVAL` is specified in seconds (default is `1200`)
+
 ```bash
 $ heroku config:add PING_URL=http://MYAPP.herokuapp.com
 Setting config vars and restarting ping-MYAPP... done, v3
