@@ -1,5 +1,4 @@
 GEM
-  remote: http://rubygems.org/
   specs:
     clockwork (0.4.1)
       tzinfo
