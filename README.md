@@ -27,9 +27,10 @@ Now add the URL of the heroku application you want to ping using the
 You can also choose HTTP request method and pinging interval via
 `PING_METHOD` and `PING_INTERVAL` variables
 
-`PING_METHOD` accepts `HEAD` (default) or `GET` values
+`PING_METHOD` can be set to `HEAD` (default) or `GET`, which specifies
+the HTTP method to use when hitting the server.
 
-`PING_INTERVAL` is specified in seconds (default is `1200`)
+`PING_INTERVAL` is specified in seconds (default is `1200`.)
 
 ```bash
 $ heroku config:add PING_URL=http://MYAPP.herokuapp.com
