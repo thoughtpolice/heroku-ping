@@ -24,13 +24,7 @@ Git remote heroku added
 Now add the URL of the heroku application you want to ping using the
 `PING_URL` environment variable.
 
-You can also choose HTTP request method and pinging interval via
-`PING_METHOD` and `PING_INTERVAL` variables
-
-`PING_METHOD` can be set to `HEAD` (default) or `GET`, which specifies
-the HTTP method to use when hitting the server.
-
-`PING_INTERVAL` is specified in seconds (default is `1200`.)
+_See list of accepted variables below_
 
 ```bash
 $ heroku config:add PING_URL=http://MYAPP.herokuapp.com
@@ -59,6 +53,15 @@ Scaling worker processes... done, now running 1
 
 You're done. Now your web application will be kept alive! You can make
 sure it's working by checking `heroku logs`.
+
+## Environment variables
+
+ Name | Expected value | Description | Example 
+------|----------------|-------------|---------
+`PING_URL` | URI (with scheme) | One or multiple URLs to ping. A `,` character is treated as delimeter when passing more than one value | `http://www.google.com,https://github.com`
+`PING_METHOD` | `HEAD` (default) or `GET` | HTTP request method used for pinging | `GET`
+`PING_INTERVAL`| Integer number (default is `1200`) | Time between pings. Specified in seconds | `60`
+`PING_VERIFY_SSL` | `0` (default) or `1` | Should we expect valid SSL certificate if URI begins with `https`? | `1`
 
 # Join in
 
