@@ -1,7 +1,8 @@
 # heroku-ping: utility to keep heroku web applications active
 # Copyright (c) 2013 Austin Seipp. See license notice in LICENSE.txt.
-require 'net/http'
 
+require 'net/http'
+require 'net/https'
 require 'clockwork'
 require 'logger'
 
@@ -26,12 +27,18 @@ end
 ## -----------------------------------------------------------------------------
 ## -- Handlers -----------------------------------------------------------------
 
-def ping
-  LOG.info "Pinging #{ENV['PING_URL']}..."
+def ping_sites
+  ENV['PING_URL'].split(',').each { | url | ping(url) }
+end
+
+def ping(url)
+  LOG.info "Pinging #{url}..."
   LOG.info "HTTP method: #{ENV['PING_METHOD'].to_s.upcase}"
 
-  resp = request(ENV['PING_URL'], ENV['PING_METHOD'].downcase.to_sym)
-  if resp.code =~ /^[1-3][0-9]{2}$/ # Valid codes [100-399]
+  resp = request(url, ENV['PING_METHOD'].downcase.to_sym)
+  if resp == false
+    LOG.error "Ping failed"
+  elsif resp.code =~ /^[1-3][0-9]{2}$/ # Valid codes [100-399]
     LOG.info "Status code: (#{resp.code})"
   else
     headers = ''
@@ -47,16 +54,35 @@ def request(uri, type=:head)
  url = URI.parse(uri)
  url_path = url.path == '' ? '/' : url.path
 
- Net::HTTP.start(url.host, url.port) do | http |
-   case type
-   when :head
-     http.head(url_path)
-   when :get
-     http.get(url_path)
-   else
-     raise ArgumentError, 'Unsupported HTTP method'
-   end
- end
+ @http = Net::HTTP.new(url.host, url.port)
+
+ handle_ssl(uri)
+ send_request(type, url_path)
+rescue StandardError => e
+ LOG.error "Encountered (#{e.class.name}) exception"
+ LOG.error "Exception message: (#{e.message})"
+
+ false
+end
+
+def handle_ssl(uri)
+  if uri[/^https/]
+    @http.use_ssl = true
+    unless ENV['PING_VERIFY_SSL'] == '1'
+      @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    end
+  end
+end
+
+def send_request(type, url_path)
+  case type
+  when :head
+    @http.head(url_path)
+  when :get
+    @http.get(url_path)
+  else
+    raise ArgumentError, 'Unsupported HTTP method'
+  end
 end
 
 ## -----------------------------------------------------------------------------
@@ -65,7 +91,7 @@ end
 module Clockwork
   handler do |j|
     case j
-      when 'ping.act' then ping
+      when 'ping.act' then ping_sites
       else raise ArgumentError, 'Invalid argument!'
     end
   end
