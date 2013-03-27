@@ -40,7 +40,7 @@ def ping(url)
   LOG.info "HTTP method: #{ENV['PING_METHOD'].to_s.upcase}"
 
   resp = request(url, ENV['PING_METHOD'].downcase.to_sym)
-  if resp == false
+  if resp == nil
     LOG.error "Ping failed"
   elsif resp.code =~ /^[1-3][0-9]{2}$/ # Valid codes [100-399]
     LOG.info "Status code: (#{resp.code})"
@@ -66,7 +66,7 @@ rescue StandardError => e
  LOG.error "Encountered (#{e.class.name}) exception"
  LOG.error "Exception message: (#{e.message})"
 
- false
+ nil
 end
 
 def handle_ssl(http, uri)
