@@ -58,10 +58,10 @@ def request(uri, type=:head)
  url = URI.parse(uri)
  url_path = url.path == '' ? '/' : url.path
 
- @http = Net::HTTP.new(url.host, url.port)
+ http = Net::HTTP.new(url.host, url.port)
 
- handle_ssl(uri)
- send_request(type, url_path)
+ handle_ssl(http, uri)
+ send_request(http, type, url_path)
 rescue StandardError => e
  LOG.error "Encountered (#{e.class.name}) exception"
  LOG.error "Exception message: (#{e.message})"
@@ -69,21 +69,21 @@ rescue StandardError => e
  false
 end
 
-def handle_ssl(uri)
+def handle_ssl(http, uri)
   if uri[/^https/]
-    @http.use_ssl = true
+    http.use_ssl = true
     unless ENV['PING_VERIFY_SSL'] == '1'
-      @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     end
   end
 end
 
-def send_request(type, url_path)
+def send_request(http, type, url_path)
   case type
   when :head
-    @http.head(url_path)
+    http.head(url_path)
   when :get
-    @http.get(url_path)
+    http.get(url_path)
   else
     raise ArgumentError, 'Unsupported HTTP method'
   end
