@@ -13,7 +13,7 @@ LOG = Logger.new(STDOUT)
 
 if ENV['PING_URL'] == nil
   LOG.fatal "No PING_URL set. Aborting."
-  Kernel.exit -1
+  Kernel.exit(-1)
 end
 
 if ENV['PING_METHOD'] == nil
