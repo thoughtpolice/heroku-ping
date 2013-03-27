@@ -11,22 +11,15 @@ require 'logger'
 
 LOG = Logger.new(STDOUT)
 
-if ENV['PING_URL'] == nil
+if ENV['PING_URL'].nil?
   LOG.fatal "No PING_URL set. Aborting."
   Kernel.exit(-1)
 end
 
-if ENV['PING_METHOD'] == nil
-  ENV['PING_METHOD'] = 'HEAD'
-end
-
-if ENV['PING_INTERVAL'] == nil
-  ENV['PING_INTERVAL'] = '1200'
-end
-
-if ENV['PING_VERIFY_SSL'] == nil
-  ENV['PING_VERIFY_SSL'] = '0'
-end
+# Default variable set-up
+ENV['PING_METHOD'] = 'HEAD' if ENV['PING_METHOD'].nil?
+ENV['PING_INTERVAL'] = '1200' if ENV['PING_INTERVAL'].nil?
+ENV['PING_VERIFY_SSL'] = '0' if ENV['PING_VERIFY_SSL'].nil?
 
 ## -----------------------------------------------------------------------------
 ## -- Handlers -----------------------------------------------------------------
@@ -40,7 +33,7 @@ def ping(url)
   LOG.info "HTTP method: #{ENV['PING_METHOD'].to_s.upcase}"
 
   resp = request(url, ENV['PING_METHOD'].downcase.to_sym)
-  if resp == nil
+  if resp.nil?
     LOG.error "Ping failed"
   elsif resp.code =~ /^[1-3][0-9]{2}$/ # Valid codes [100-399]
     LOG.info "Status code: (#{resp.code})"
@@ -56,7 +49,7 @@ end
 
 def request(uri, type=:head)
  url = URI.parse(uri)
- url_path = url.path == '' ? '/' : url.path
+ url_path = url.path.empty? ? '/' : url.path
 
  http = Net::HTTP.new(url.host, url.port)
 
