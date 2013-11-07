@@ -1,12 +1,13 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    clockwork (0.5.0)
+    clockwork (0.5.1)
       tzinfo (~> 0.3.35)
-    tzinfo (0.3.37)
+    tzinfo (0.3.38)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  clockwork
+  clockwork (= 0.5.1)
+  tzinfo (~> 0.3)
