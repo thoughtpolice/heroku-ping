@@ -1,3 +1,4 @@
 source 'https://rubygems.org'
 
-gem 'clockwork'
+gem "clockwork", "0.5.1"
+gem "tzinfo", "~> 0.3"
