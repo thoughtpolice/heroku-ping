@@ -1,1 +1,1 @@
-worker: bundle exec clockwork ping.rb
+worker: bundle exec clockwork app.rb
