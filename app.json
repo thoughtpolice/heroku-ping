@@ -1,12 +1,12 @@
 {
-  "name": "Heroku Ping",
-  "description": "A ruby application to keep Heroku Dynos alive",
-  "keywords": ["ruby", "heroku", "ping"],
-  "repository": "https://github.com/thoughtpolice/heroku-ping",
+  "name":        "Heroku Ping",
+  "description": "A ruby application to keep Heroku Dynos alive.",
+  "keywords":    ["ruby", "heroku", "ping"],
+  "repository":  "https://github.com/thoughtpolice/heroku-ping",
 
   "env": {
     "PING_URL": {
-      "description": "One or multiple URLs to ping, separated by commas"
+      "description": "One or multiple URLs to ping, separated by commas."
     },
     "PING_METHOD": {
       "description": "HTTP request method used for pinging; either HEAD or GET",
