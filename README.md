@@ -8,6 +8,8 @@ site often experience a nasty delay.
 This is a heroku application that pings a URL every 20 minutes to fix
 that. No more, no less.
 
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/thoughtpolice/heroku-ping)
+
 # Usage
 
 Clone the repo, create an app.
